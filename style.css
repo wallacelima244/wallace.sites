@@ -1,0 +1,253 @@
+/* =========================================
+   1. RESET E VARIÁVEIS PREMIUM
+   ========================================= */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #050505; }
+::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #00f0ff; }
+
+:root {
+  --bg-color: #030305;
+  --surface: rgba(20, 20, 25, 0.6); /* Vidro Escuro */
+  --border: rgba(255, 255, 255, 0.08);
+  --primary: #00f0ff; /* Ciano Neon */
+  --primary-glow: rgba(0, 240, 255, 0.4);
+  --secondary: #9d4edd; /* Roxo Neon */
+  --secondary-glow: rgba(157, 78, 221, 0.4);
+  --text: #ffffff;
+  --text-muted: #a0a0ab;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  background-image: radial-gradient(circle at 15% 50%, rgba(157,78,221,0.05), transparent 25%),
+                    radial-gradient(circle at 85% 30%, rgba(0,240,255,0.05), transparent 25%);
+  color: var(--text);
+  overflow-x: hidden;
+  padding-top: 85px;
+}
+
+.container { width: min(1150px, 90%); margin: 0 auto; }
+h1, h2, h3, h4, .brand { font-family: 'Poppins', sans-serif; }
+
+/* =========================================
+   2. CLASSES DE ANIMAÇÃO DE SCROLL (JS)
+   ========================================= */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+}
+.reveal.active { opacity: 1; transform: translateY(0); }
+.delay-1 { transition-delay: 0.15s; }
+.delay-2 { transition-delay: 0.3s; }
+
+/* =========================================
+   3. EFEITO GLASSMORPHISM (VIDRO) E BOTÕES
+   ========================================= */
+.glass-card {
+  background: var(--surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+.glass-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(0, 240, 255, 0.3);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,240,255,0.05);
+}
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 16px 32px; border-radius: 12px; font-weight: 700; font-size: 16px;
+  text-decoration: none; transition: 0.3s ease; border: none; cursor: pointer;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
+  color: #000; box-shadow: 0 8px 25px var(--primary-glow);
+}
+.btn-primary:hover { box-shadow: 0 12px 35px var(--primary-glow); filter: brightness(1.2); }
+.btn-outline { border: 1px solid var(--border); color: #fff; background: transparent; backdrop-filter: blur(5px); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); background: rgba(0,240,255,0.05); }
+
+/* Animação Botão Principal (Pulse) */
+.pulse-btn { animation: pulseGlow 2s infinite; }
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.5); }
+  70% { box-shadow: 0 0 0 15px rgba(0, 240, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 240, 255, 0); }
+}
+
+/* =========================================
+   4. NAVBAR
+   ========================================= */
+.navbar {
+  position: fixed; top: 0; left: 0; width: 100%; height: 85px;
+  background: rgba(3, 3, 5, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border); z-index: 2000; transition: transform 0.4s ease;
+}
+.navbar.nav-hidden { transform: translateY(-100%); }
+
+.nav-container { display: flex; justify-content: space-between; align-items: center; height: 100%; }
+.brand { font-size: 26px; font-weight: 900; color: #fff; text-decoration: none; display: flex; align-items: center; gap: 8px; }
+.brand span { color: var(--primary); }
+.brand i { color: var(--secondary); font-size: 28px; }
+
+.desktop-menu { display: flex; gap: 32px; }
+.desktop-menu a { color: var(--text-muted); text-decoration: none; font-weight: 500; font-size: 15px; transition: 0.3s; }
+.desktop-menu a:hover { color: var(--text); text-shadow: 0 0 10px var(--primary-glow); }
+
+.btn-contact-nav {
+  padding: 10px 24px; border-radius: 8px; border: 1px solid var(--primary); color: var(--primary);
+  text-decoration: none; font-weight: 600; font-size: 14px; transition: 0.3s;
+}
+.btn-contact-nav:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary-glow); }
+
+.menu-toggle { display: none; background: transparent; border: none; color: #fff; font-size: 28px; cursor: pointer; }
+
+/* Menu Mobile */
+.mobile-menu {
+  position: fixed; top: 85px; left: 0; width: 100%; background: rgba(3, 3, 5, 0.95); backdrop-filter: blur(20px);
+  padding: 20px 5% 30px; border-bottom: 1px solid var(--border); border-radius: 0 0 24px 24px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.9); z-index: 1999; display: none; flex-direction: column; gap: 12px;
+}
+.mobile-menu.active { display: flex; }
+.mobile-link {
+  display: block; width: 100%; text-align: center; padding: 16px; background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border); border-radius: 12px; color: #fff; text-decoration: none; font-weight: 600; font-size: 16px;
+}
+.btn-mobile-cta { background: linear-gradient(135deg, var(--secondary), var(--primary)); color: #000; border: none; }
+
+/* =========================================
+   5. HERO & MARQUEE
+   ========================================= */
+.hero { position: relative; min-height: 80vh; display: flex; align-items: center; text-align: center; overflow: hidden; padding: 60px 0; }
+.hero-bg-glow {
+  position: absolute; top: 10%; left: 50%; transform: translateX(-50%);
+  width: 600px; height: 600px; background: radial-gradient(circle, var(--secondary-glow) 0%, transparent 70%);
+  z-index: -1; pointer-events: none;
+}
+.badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 50px; border: 1px solid var(--primary); background: rgba(0, 240, 255, 0.05); color: var(--primary); font-size: 13px; font-weight: 700; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1px; }
+.hero h1 { font-size: clamp(40px, 6vw, 76px); line-height: 1.1; margin-bottom: 24px; font-weight: 900; letter-spacing: -1px; }
+.hero h1 span { background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero p { font-size: 18px; color: var(--text-muted); max-width: 650px; margin: 0 auto 40px; line-height: 1.8; }
+.hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+/* Marquee (Esteira Infinita) */
+.tech-marquee-container { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 15px 0; background: rgba(0,0,0,0.5); overflow: hidden; display: flex; white-space: nowrap; }
+.tech-marquee { display: flex; animation: scroll-left 25s linear infinite; }
+.tech-marquee span { margin: 0 40px; font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 800; color: transparent; -webkit-text-stroke: 1px var(--border); transition: 0.3s; }
+.tech-marquee span:hover { -webkit-text-stroke: 1px var(--primary); color: var(--primary); text-shadow: 0 0 15px var(--primary-glow); }
+@keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+/* =========================================
+   6. SEÇÕES (SERVIÇOS, MÉTODO, PORTFÓLIO)
+   ========================================= */
+section { padding: 120px 0; }
+.section-title { text-align: center; margin-bottom: 60px; }
+.section-title h2 { font-size: 38px; margin-bottom: 12px; font-weight: 900; }
+.section-title p { color: var(--text-muted); font-size: 18px; }
+
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+
+/* Serviços */
+.service-card { padding: 40px 30px; text-align: center; }
+.icon-wrapper { width: 70px; height: 70px; margin: 0 auto 24px; display: flex; align-items: center; justify-content: center; background: rgba(0,240,255,0.05); border: 1px solid var(--primary); border-radius: 16px; font-size: 30px; color: var(--primary); box-shadow: inset 0 0 15px var(--primary-glow); }
+.service-card h3 { font-size: 22px; margin-bottom: 16px; }
+.service-card p { color: var(--text-muted); font-size: 15px; line-height: 1.7; }
+
+/* Como Funciona */
+.process-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: center; }
+.process-step { padding: 20px; position: relative; }
+.step-number { font-size: 60px; font-weight: 900; color: transparent; -webkit-text-stroke: 2px var(--border); margin-bottom: -20px; z-index: -1; position: relative; }
+.process-step h3 { font-size: 20px; color: var(--primary); margin-bottom: 10px; }
+.process-step p { color: var(--text-muted); line-height: 1.6; font-size: 15px; }
+
+/* Portfólio */
+.portfolio-card { position: relative; }
+.portfolio-img { position: relative; overflow: hidden; border-bottom: 1px solid var(--border); }
+.project-image { width: 100%; height: 280px; object-fit: cover; transition: 0.5s; display: block; }
+.img-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; font-size: 40px; color: var(--primary); opacity: 0; transition: 0.4s; }
+.portfolio-card:hover .project-image { transform: scale(1.05); }
+.portfolio-card:hover .img-overlay { opacity: 1; backdrop-filter: blur(5px); }
+.portfolio-info { padding: 30px; }
+.portfolio-info h3 { font-size: 24px; margin-bottom: 12px; }
+.portfolio-info p { color: var(--text-muted); font-size: 15px; line-height: 1.6; margin-bottom: 20px; }
+
+/* FAQ e Contato */
+.faq-grid { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+.faq-item { padding: 24px 30px; }
+.faq-item h4 { font-size: 18px; margin-bottom: 10px; color: var(--primary); }
+.faq-item p { color: var(--text-muted); font-size: 15px; line-height: 1.6; }
+
+.contact { padding-bottom: 120px; }
+.contact-box { position: relative; padding: 60px 40px; text-align: center; border-color: rgba(157, 78, 221, 0.3); overflow: hidden; }
+.contact-glow { position: absolute; top: -50%; left: 50%; transform: translateX(-50%); width: 300px; height: 300px; background: var(--secondary-glow); filter: blur(100px); z-index: -1; }
+.contact-box h2 { font-size: 36px; margin-bottom: 16px; }
+.contact-box p { color: var(--text-muted); font-size: 18px; margin-bottom: 35px; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+footer { text-align: center; padding: 40px 0; border-top: 1px solid var(--border); background: #010101; }
+.footer-logo { font-size: 24px; font-weight: 800; margin-bottom: 10px; color: #fff; }
+.footer-logo i { color: var(--primary); }
+footer p { color: var(--text-muted); font-size: 14px; }
+
+/* =========================================
+   7. BOTÕES FLUTUANTES NEON GLASS
+   ========================================= */
+.floating-actions { position: fixed; right: 20px; bottom: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 15px; }
+
+.floating-btn {
+  width: 60px; height: 60px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px; text-decoration: none;
+  background: rgba(0, 0, 0, 0.4); /* Fundo semi-transparente */
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); /* Efeito Vidro */
+  transition: all 0.3s ease;
+}
+
+/* WhatsApp Neon Ciano */
+.neon-whats {
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+}
+.neon-whats:hover {
+  background: rgba(0, 240, 255, 0.1);
+  box-shadow: 0 0 25px var(--primary), inset 0 0 15px var(--primary-glow);
+  transform: translateY(-4px);
+}
+
+/* Instagram Neon Roxo */
+.neon-insta {
+  color: #ff00ff; /* Rosa/Roxo Neon */
+  border: 1px solid #ff00ff;
+  box-shadow: 0 0 15px rgba(255, 0, 255, 0.2);
+}
+.neon-insta:hover {
+  background: rgba(255, 0, 255, 0.1);
+  box-shadow: 0 0 25px #ff00ff, inset 0 0 15px rgba(255, 0, 255, 0.4);
+  transform: translateY(-4px);
+}
+
+/* =========================================
+   8. RESPONSIVIDADE
+   ========================================= */
+@media (max-width: 900px) {
+  .desktop-menu, .desktop-only { display: none !important; }
+  .menu-toggle { display: block; }
+  .hero h1 { font-size: 44px; }
+  .hero-buttons { flex-direction: column; width: 100%; }
+  .btn { width: 100%; }
+  .contact-box { padding: 40px 20px; }
+  .contact-box h2 { font-size: 28px; }
+  .floating-btn { width: 50px; height: 50px; font-size: 24px; }
+}
