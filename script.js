@@ -1,13 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
   
   // ==========================================
-  // 1. SCROLL REVEAL (Surgimento suave)
+  // 1. SCROLL REVEAL (Animação Fluida VIP)
   // ==========================================
   const revealElements = document.querySelectorAll(".reveal");
 
   const revealOnScroll = () => {
     const windowHeight = window.innerHeight;
-    const elementVisible = 100;
+    // Se for celular (tela menor que 768px), a animação dispara mais cedo (50px)
+    // Se for PC, dispara com 100px. Isso deixa perfeito nas duas telas!
+    const elementVisible = window.innerWidth < 768 ? 40 : 100; 
 
     revealElements.forEach((el) => {
       const elementTop = el.getBoundingClientRect().top;
@@ -18,12 +20,13 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   window.addEventListener("scroll", revealOnScroll);
-  revealOnScroll();
+  revealOnScroll(); // Dispara logo ao carregar a página
 
   // ==========================================
-  // 2. ANIMAÇÃO DOS NÚMEROS (CONTADOR)
+  // 2. ANIMAÇÃO DOS NÚMEROS (À prova de falhas no Mobile)
   // ==========================================
   const counters = document.querySelectorAll(".counter");
+  const statsSection = document.querySelector(".stats-section");
   let hasCounted = false;
 
   const startCounting = () => {
@@ -46,17 +49,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  // Verifica se a seção de status apareceu na tela para contar
-  const statsSection = document.querySelector(".stats-section");
-  window.addEventListener("scroll", () => {
-    if (!hasCounted && statsSection) {
-      const sectionTop = statsSection.getBoundingClientRect().top;
-      if (sectionTop < window.innerHeight - 50) {
+  // Observador de tela: Dispara assim que a seção aparece
+  if (statsSection) {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !hasCounted) {
         startCounting();
         hasCounted = true; // Conta só 1 vez
       }
-    }
-  });
+    }, { threshold: 0.3 }); // Dispara quando 30% da seção estiver na tela
+    
+    observer.observe(statsSection);
+  }
 
   // ==========================================
   // 3. NAVBAR INTELIGENTE (ESCONDE AO DESCER)
