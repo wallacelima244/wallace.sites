@@ -317,4 +317,70 @@ footer { background: #010101; border-top: 1px solid var(--border); padding: 60px
   font-size: 38px !important;
   line-height: 1.3 !important;
   margin-bottom: 25px !important;
+}/* =========================================
+   ADAPTAÇÃO FINAL E CORREÇÃO DE ANIMAÇÃO
+   ========================================= */
+@media (max-width: 950px) {
+  /* Trava total contra quebras */
+  html, body { 
+    overflow-x: hidden !important; 
+    position: relative;
+    width: 100%;
+  }
+
+  /* Suaviza o pulo da animação no celular */
+  .reveal { 
+    opacity: 0; 
+    transform: translateY(20px) !important; 
+    transition: opacity 0.8s ease, transform 0.8s ease !important;
+  }
+  .reveal.active { opacity: 1; transform: translateY(0) !important; }
+
+  /* Empilhamento de seções */
+  .grid-2, .grid-3, .align-center { 
+    display: flex !important; 
+    flex-direction: column !important; 
+    gap: 30px !important;
+  }
+
+  /* Impede a Janela de Código de vazar */
+  .code-window {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto;
+  }
+  .code-window pre {
+    font-size: 11px !important; /* Diminui letra para caber em telas finas */
+    padding: 20px !important;
+    white-space: pre-wrap !important; /* Quebra linha de código se não couber */
+  }
+
+  /* Ajuste da foto e moldura */
+  .about-img-box {
+    width: 100% !important;
+    max-width: 320px !important;
+    margin: 0 auto 30px !important;
+  }
+  .premium-frame { aspect-ratio: 1/1 !important; } /* Foto quadrada no celular fica melhor */
+
+  /* Textos e Títulos */
+  .alert-text { font-size: 28px !important; text-align: center; }
+  .problem-text p { text-align: center; font-size: 16px; }
+  .problem-list li { text-align: left; }
+  
+  .hero h1 { font-size: 32px !important; }
+  .section-title h2 { font-size: 28px !important; }
+
+  /* Botão da Navbar no Mobile (Pequeno pra não quebrar) */
+  .btn-contact-nav {
+    padding: 8px 12px !important;
+    font-size: 11px !important;
+  }
+  
+  /* Ajuste das Estatísticas */
+  .stats-grid { 
+    flex-direction: column !important; 
+    align-items: center !important; 
+    gap: 40px !important; 
+  }
 }
