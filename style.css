@@ -290,4 +290,66 @@ footer p { color: var(--text-muted); font-size: 14px; }
   .contact-box h2 { font-size: 30px; }
   
   .floating-btn { width: 50px; height: 50px; font-size: 24px; }
+}/* =========================================
+   11. ADAPTAÇÃO EXTREMA PARA CELULAR (MOBILE FIRST)
+   ========================================= */
+@media (max-width: 950px) {
+  /* 1. Trava a tela para não vazar pros lados de jeito nenhum */
+  html, body { 
+    overflow-x: hidden !important; 
+    width: 100% !important; 
+  }
+
+  /* 2. Destrói as colunas lado a lado e empilha tudo (1 por linha) */
+  .grid-2, .grid-3, .align-center { 
+    display: flex !important; 
+    flex-direction: column !important; 
+    gap: 35px !important; 
+  }
+
+  /* 3. Garante que as imagens e textos caibam na tela */
+  .problem-image, .about-img-box, .code-window, .premium-frame {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* 4. Ordem inteligente (Foto em cima, Texto embaixo) */
+  .problem-text { order: 1; }
+  .problem-image { order: 2; }
+  .about-img-box { order: 1; margin-bottom: 10px !important; }
+  .about-text { order: 2; text-align: center; }
+
+  /* 5. Esconde Menu de PC e ajusta fontes */
+  .desktop-menu, .desktop-only { display: none !important; }
+  .menu-toggle { display: block !important; }
+  
+  .hero { padding: 40px 0 60px !important; min-height: 75vh !important; }
+  .hero h1 { font-size: 34px !important; line-height: 1.2 !important; }
+  .hero p { font-size: 16px !important; }
+  .section-title h2 { font-size: 30px !important; }
+  .alert-text { font-size: 28px !important; }
+  .about-text h2 { font-size: 30px !important; }
+
+  /* 6. Botões e Respiros ajustados pro dedo (Touch) */
+  .hero-buttons { flex-direction: column !important; width: 100% !important; }
+  .btn { width: 100% !important; font-size: 15px !important; padding: 16px 20px !important; text-align: center !important; justify-content: center !important; }
+  
+  section { padding: 60px 0 !important; }
+  
+  .stats-grid { gap: 20px !important; }
+  .stat-item h3 { font-size: 34px !important; }
+
+  /* 7. Caixas de Garantia, Contato e Portfólio */
+  .service-card, .portfolio-info, .faq-item { padding: 25px 20px !important; }
+  .guarantee-box { padding: 30px 20px !important; border-radius: 16px !important; }
+  .guarantee-box h2 { font-size: 24px !important; }
+  .contact-box { padding: 40px 20px !important; }
+  .contact-box h2 { font-size: 26px !important; }
+  
+  /* 8. Janela do Código (Diminui a fonte pra caber) */
+  .code-window pre { padding: 15px !important; font-size: 11px !important; }
+
+  /* 9. Botões Flutuantes Menores pra não tampar a leitura */
+  .floating-btn { width: 50px !important; height: 50px !important; font-size: 24px !important; }
+  .floating-actions { right: 15px !important; bottom: 15px !important; }
 }
