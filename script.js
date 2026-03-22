@@ -1,134 +1,103 @@
-document.addEventListener("DOMContentLoaded", () => {
-  
-  // ==========================================
-  // 1. MOTOR DE ANIMAÇÃO (REVEAL) - VERSÃO ULTRA FLUIDA
-  // ==========================================
-  const revealElements = document.querySelectorAll(".reveal");
-  
-  const observerOptions = {
-    threshold: 0.15, // Dispara quando 15% do elemento entra na tela
-    rootMargin: "0px 0px -50px 0px" // Dispara um pouco antes de chegar para evitar "atrasos"
-  };
+document.addEventListener('DOMContentLoaded', () => {
 
-  const revealObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("active");
-        observer.unobserve(entry.target); // Para de processar o elemento após animar (ganha performance)
-      }
-    });
-  }, observerOptions);
+    // 1. Menu Mobile Toggle
+    const mobileMenu = document.getElementById('mobile-menu');
+    const navLinks = document.querySelector('.nav-links');
+    const navItems = document.querySelectorAll('.nav-links a');
 
-  revealElements.forEach(el => revealObserver.observe(el));
-
-  // ==========================================
-  // 2. ANIMAÇÃO DOS NÚMEROS (CONTADOR)
-  // ==========================================
-  const counters = document.querySelectorAll(".counter");
-  const statsSection = document.querySelector(".stats-section");
-  let hasCounted = false;
-
-  const startCounting = () => {
-    counters.forEach(counter => {
-      const target = +counter.getAttribute("data-target");
-      const duration = 2000; // 2 segundos de animação
-      const increment = target / (duration / 16); 
-      let current = 0;
-
-      const updateCounter = () => {
-        current += increment;
-        if (current < target) {
-          counter.innerText = Math.ceil(current);
-          requestAnimationFrame(updateCounter);
-        } else {
-          counter.innerText = target;
-        }
-      };
-      updateCounter();
-    });
-  };
-
-  // Observador específico para os números
-  if (statsSection) {
-    const statsObserver = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && !hasCounted) {
-        startCounting();
-        hasCounted = true;
-      }
-    }, { threshold: 0.5 });
-    statsObserver.observe(statsSection);
-  }
-
-  // ==========================================
-  // 3. NAVBAR INTELIGENTE (ESCONDE AO DESCER / APARECE AO SUBIR)
-  // ==========================================
-  let lastScrollTop = 0;
-  const navbar = document.getElementById("navbar");
-
-  window.addEventListener("scroll", () => {
-    let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    
-    // Se rolou mais que 100px para baixo, esconde a barra
-    if (scrollTop > lastScrollTop && scrollTop > 100) {
-      navbar.classList.add("nav-hidden");
-    } else {
-      // Se subiu, mostra a barra novamente
-      navbar.classList.remove("nav-hidden");
-    }
-    lastScrollTop = scrollTop;
-  }, { passive: true });
-
-  // ==========================================
-  // 4. MENU GAVETA MOBILE (ABRIR / FECHAR)
-  // ==========================================
-  const menuToggleBtn = document.getElementById("menuToggle");
-  const mobileMenuDiv = document.getElementById("mobileMenu");
-  const body = document.body;
-
-  const toggleMenu = () => {
-    const isActive = mobileMenuDiv.classList.toggle("active");
-    // Altera o ícone de Barras para X ao abrir
-    menuToggleBtn.innerHTML = isActive ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars-staggered"></i>';
-    
-    // Trava o scroll do fundo para o menu não bugar no celular
-    if (isActive) {
-      body.style.overflow = "hidden";
-    } else {
-      body.style.overflow = "auto";
-    }
-  };
-
-  if (menuToggleBtn && mobileMenuDiv) {
-    menuToggleBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      toggleMenu();
-    });
-  }
-
-  // Fecha o menu automaticamente ao clicar em qualquer link interno
-  document.querySelectorAll(".mobile-link").forEach(link => {
-    link.addEventListener("click", () => {
-      if (mobileMenuDiv.classList.contains("active")) toggleMenu();
-    });
-  });
-
-  // ==========================================
-  // 5. ROLAGEM SUAVE (SMOOTH SCROLL)
-  // ==========================================
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      const targetId = this.getAttribute('href');
-      if (targetId === "#") return;
-
-      const targetElement = document.querySelector(targetId);
-      if (targetElement) {
-        e.preventDefault();
-        window.scrollTo({
-          top: targetElement.offsetTop - 80, // Desconto da altura da navbar
-          behavior: 'smooth'
+    if (mobileMenu) {
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            // Troca o ícone de hambúrguer para X
+            const icon = mobileMenu.querySelector('i');
+            if(navLinks.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
         });
-      }
-    });
-  });
 
+        // Fecha o menu ao clicar em um link
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenu.querySelector('i').classList.replace('fa-times', 'fa-bars');
+            });
+        });
+    }
+
+    // 2. Scroll Reveal Suave (Cubic-Bezier Matching)
+    const revealOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, revealOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // 3. Mouse Tracking (Brilho dinâmico do Vidro)
+    const glassCards = document.querySelectorAll('.glass-card');
+    glassCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+
+    // 4. Contagem Animada (Estatísticas de Elite)
+    const stats = document.querySelectorAll('.stat-number');
+    let counted = false;
+
+    const countObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && !counted) {
+            counted = true;
+            stats.forEach(stat => {
+                const target = +stat.getAttribute('data-target');
+                const duration = 2500; // Animação um pouco mais lenta para dar peso
+                const increment = target / (duration / 16); 
+                
+                let current = 0;
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        stat.innerText = Math.ceil(current);
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        stat.innerText = target;
+                    }
+                };
+                updateCounter();
+            });
+        }
+    }, { threshold: 0.5 });
+
+    const statsSection = document.querySelector('.stats-section');
+    if(statsSection) countObserver.observe(statsSection);
+
+    // 5. FAQ Accordion (Sanfona Polida)
+    const faqItems = document.querySelectorAll('.faq-question');
+    faqItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const answer = item.nextElementSibling;
+            const isOpen = item.classList.contains('active');
+
+            // Fechar os outros abertos para manter a UX limpa
+            document.querySelectorAll('.faq-answer').forEach(ans => ans.style.maxHeight = null);
+            document.querySelectorAll('.faq-question').forEach(q => q.classList.remove('active'));
+
+            if (!isOpen) {
+                item.classList.add('active');
+                answer.style.maxHeight = answer.scrollHeight + "px";
+            }
+        });
+    });
 });
