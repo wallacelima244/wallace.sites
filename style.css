@@ -42,64 +42,47 @@ body.no-scroll { overflow: hidden; } /* Trava a tela quando menu mobile abre */
 @keyframes drift { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(10%, 15%) scale(1.2); } }
 
 /* =========================================
-   NAVBAR PREMIUM (PÍLULA FLUTUANTE)
+   NAVBAR PREMIUM (DESKTOP)
    ========================================= */
 .navbar { 
-    position: fixed; top: 20px; left: 0; width: 100%; z-index: 1000; 
-    display: flex; justify-content: center;
-    transition: all 0.4s ease; pointer-events: none; /* Deixa clicar fora */
+    position: fixed; top: 0; width: 100%; z-index: 1000; 
+    background: transparent; /* Começa invisível */
+    border-bottom: 1px solid transparent; 
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
+    padding: 0.5rem 0; /* Maior quando no topo */
+}
+/* Efeito Mágico Ativado pelo Scroll no JS */
+.navbar.scrolled {
+    background: rgba(3, 3, 10, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
 }
 
-.nav-container { 
-    width: 95%; max-width: 1000px; /* Tamanho da pílula */
-    display: flex; justify-content: space-between; align-items: center; 
-    padding: 0.6rem 1.5rem; 
-    border-radius: 50px; /* Deixa redondo estilo pílula */
-    background: rgba(10, 10, 15, 0.5); 
-    border: 1px solid rgba(255, 255, 255, 0.08); 
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    pointer-events: auto; /* Reativa o clique dentro da pílula */
-}
-
-/* Efeito de Brilho ao Rolar a Página */
-.navbar.scrolled .nav-container {
-    background: rgba(3, 3, 10, 0.85);
-    border-color: rgba(126, 34, 206, 0.5);
-    box-shadow: 0 10px 30px rgba(126, 34, 206, 0.2);
-}
-
-.logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; z-index: 1001; position: relative; }
+.nav-container { max-width: 1200px; margin: 0 auto; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 1.6rem; font-weight: 900; letter-spacing: -1px; z-index: 1001; position: relative; cursor: pointer; }
 .logo span { color: var(--secondary-purple); }
 
-.nav-icon { display: none; } /* Ícones invisíveis no PC */
-
-/* Links com efeito de Bolha no Desktop */
-.nav-links { display: flex; gap: 0.5rem; list-style: none; align-items: center; }
+/* Links Animados (Desktop) */
+.nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
 .nav-links li a { 
-    color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 600; 
-    padding: 0.6rem 1.2rem; border-radius: 30px; transition: all 0.3s ease;
+    color: var(--text-main); text-decoration: none; font-size: 0.95rem; font-weight: 600; 
+    position: relative; padding-bottom: 5px; transition: color 0.3s ease;
 }
-.nav-links li a:not(.btn-primary):hover { 
-    color: #fff; 
-    background: rgba(255, 255, 255, 0.08); 
-    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.02);
+.nav-links li a:not(.btn-outline):hover { color: #fff; }
+/* O Underline Neon */
+.nav-links li a:not(.btn-outline)::after {
+    content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px;
+    background: var(--gradient-brand);
+    transition: width 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    box-shadow: 0 0 10px rgba(126, 34, 206, 0.5);
 }
+.nav-links li a:not(.btn-outline):hover::after { width: 100%; }
 
-/* Menu Hamburger Animado Foda */
-.menu-toggle { display: none; cursor: pointer; width: 30px; height: 20px; position: relative; z-index: 1001; }
-.hamburger, .hamburger::before, .hamburger::after {
-    content: ''; position: absolute; width: 100%; height: 2px;
-    background: var(--text-main); border-radius: 2px; transition: all 0.4s ease;
-}
-.hamburger { top: 50%; transform: translateY(-50%); }
-.hamburger::before { top: -8px; }
-.hamburger::after { bottom: -8px; }
-.menu-toggle.active .hamburger { background: transparent; }
-.menu-toggle.active .hamburger::before { top: 0; transform: rotate(45deg); background: var(--secondary-purple); }
-.menu-toggle.active .hamburger::after { bottom: 0; transform: rotate(-45deg); background: var(--secondary-purple); }
-
+.menu-toggle { display: none; font-size: 1.8rem; cursor: pointer; z-index: 1001; position: relative; color: var(--text-main); transition: 0.3s; }
+.menu-toggle:hover { color: var(--secondary-purple); }
 .mobile-only { display: none !important; }
 
 /* Botões Globais */
@@ -260,43 +243,4 @@ body.no-scroll { overflow: hidden; } /* Trava a tela quando menu mobile abre */
     
     .cta-box { padding: 4rem 2rem; }
     .cta-box h2 { font-size: 2.2rem; }
-}/* =========================================
-   MENU MOBILE APP-STYLE (DENTRO DO MEDIA 992px)
-   ========================================= */
-@media (max-width: 992px) {
-    .navbar { top: 15px; }
-    .nav-container { padding: 0.8rem 1.2rem; border-radius: 16px; width: 92%; }
-    
-    .menu-toggle { display: block; }
-    .desktop-only { display: none !important; }
-    
-    /* Dropdown Flutuante Premium */
-    .nav-links {
-        position: absolute; top: 120%; left: 0; width: 100%;
-        background: rgba(10, 10, 18, 0.95); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-        border: 1px solid rgba(126, 34, 206, 0.3); border-radius: 16px;
-        padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-        /* Animação de Surgimento */
-        opacity: 0; visibility: hidden; transform: translateY(-15px) scale(0.98);
-        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-        z-index: 999;
-    }
-    
-    .nav-links.active {
-        opacity: 1; visibility: visible; transform: translateY(0) scale(1);
-    }
-    
-    .nav-links li { width: 100%; }
-    .nav-icon { display: inline-block; width: 25px; color: var(--primary-blue); font-size: 1.1rem; }
-    
-    .nav-links li a { 
-        display: flex; align-items: center;
-        background: rgba(255,255,255,0.03); border-radius: 10px;
-        padding: 1rem; font-size: 1.05rem; font-weight: 500; color: var(--text-main);
-    }
-    .nav-links li a:active { background: rgba(126, 34, 206, 0.2); }
-    
-    .mobile-cta-container { margin-top: 0.5rem; }
-    .mobile-only { display: flex !important; width: 100%; font-size: 1.05rem; padding: 1rem;}
 }
